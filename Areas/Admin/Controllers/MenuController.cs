@@ -195,7 +195,7 @@ namespace MVCWebInvite.Areas.Admin.Controllers
             try
             {
                 var client = CreateAuthorizedClient();
-                var response = client.GetAsync("menu").Result;
+                var response = await client.GetAsync("menu");
                 if (!response.IsSuccessStatusCode)
                 {
                     TempData["ErrorMessage"] = $"Failed to load menu items. {(int)response.StatusCode} {response.ReasonPhrase}";
@@ -383,7 +383,7 @@ namespace MVCWebInvite.Areas.Admin.Controllers
                     TempData["SuccessMessage"] = "Menu item deleted successfully.";
 
                 }
-                return RedirectLogin("Index");
+                return RedirectToAction("Index");
             }
             catch (InvalidOperationException ex)
             {

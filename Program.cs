@@ -18,11 +18,28 @@ namespace MVCWebInvite
             {
                 client.BaseAddress = new Uri("https://localhost:7008/api/");
             });
+            builder.Services.AddHttpClient("GuestAPI", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7008/api/");
+            });
+            builder.Services.AddHttpClient("BookingAPI", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7008/api/");
+            });
+            builder.Services.AddHttpClient("TableAPI", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7008/api/");
+            });
+            builder.Services.AddHttpClient("MenuAPI", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7008/api/");
+            });
 
             builder.Services.AddHttpClient("AuthAPI", client =>
             {
                 client.BaseAddress = new Uri("https://localhost:7008/api/Auth/");
             });
+
 
             //Session 
             builder.Services.AddDistributedMemoryCache();
@@ -48,24 +65,15 @@ namespace MVCWebInvite
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseSession();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseSession();
             app.UseAuthorization();
 
-            //app.MapControllerRoute(
-            //    name: "default",
-            //    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-            //app.MapAreaControllerRoute(
-            //    name: "admin",
-            //    areaName: "Admin",
-            //    pattern: "Admin/{controller=Dashboard}/{action=Index}/{id?}");
-
-
-            // Area-route först
             app.MapControllerRoute(
                   name: "areas",
                   pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
