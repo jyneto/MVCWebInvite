@@ -1,0 +1,50 @@
+﻿@using MVCWebInvite.Models
+@model Menu
+
+@section Head {
+    <meta name="description" content="Create a new menu item for the food menu." />
+}
+
+@{
+    ViewData["Title"] = "Create Menu Item";
+}
+
+<header class="mb-3">
+    <h1 class="mb-1">Add Menu Item</h1>
+    <nav aria-label="breadcrumb mb-0">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin</a></li>
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Menu" asp-action="Index">Menu</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Create</li>
+        </ol>
+    </nav>
+</header>
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+<form method="post" asp-area="Admin" asp-controller="Menu" asp-action="Create" class="mx-auto w-100" style="max-width: 640px;">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Name</label>
+        <input asp-for="Name" class="form-control" autocomplete="off" required aria-describedby="nameHelp" />
+        <div id="nameHelp" class="form-text">Give the dish a clear, short name.</div>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label">Price</label>
+        <input asp-for="Price" class="form-control" inputmode="decimal" required aria-describedby="priceHelp" />
+        <div id="priceHelp" class="form-text">Give the dish a clear, short name.</div>
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-area="Admin" asp-controller="Menu" asp-action="Index" class="btn btn-outline-success">Cancel</a>
+    </div>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}
+

@@ -1,0 +1,120 @@
+﻿@{
+    ViewData["Title"] = "Page";
+}
+@section Head {
+    <meta name="description" content="Manage food menu items: create,edit and delete dishes." />
+}
+
+<h3>@ViewData["Title"] = "Manage Menu"</h3>
+
+<header class="mb-3">
+    <h1 class="mb-1 ">Menu Management</h1>
+    <nav aria-label="breadcrumb" class="mb-0">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Admin</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Menu</li>
+        </ol>
+    </nav>
+</header>
+
+@if(TempData["SuccessMessage"] is string ok)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @ok
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if(TempData["ErrorMessage"] is string err)
+{
+    <div class"alert alert-danger alert-dismissible fade show">
+        @err
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="d-flex flex-wrap gap-2 mb-3">
+    <a asp-area="Admin" asp-controller="Menu" asp-action="Create" class="btn btn-primary">Add New Item</a>
+    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-success">Back to Dashboard</a>
+</div>
+
+@if (Model is null || !Model.Any())
+{
+    <div class="alert alert-info" role="alert">
+        No menu items found. Please add new items to the menu.
+    </div>
+}
+else
+{
+    <div class="d-md-none">
+        <div class="row g-3">
+            @foreach (var item in Model!)
+            {
+                <article class="col 12">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h2 class="h5 card-title mb-1">@item.Name</h2>
+                            <p class="card-text mb-2">@item.Description</p>
+                            <p class="mb-3"><strong>@item.Price.ToString("C")</strong></p>
+                            <div class="d-flex flex-wrap gap-2">
+                                <a asp-area="Admin" asp-controller="Menu" asp-action="Edit" asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-outline-primary" aria-label="Edit @item.Name">Edit</a>
+
+                                <form method="post" asp-area="Admin" asp-controller="Menu" asp-action="Delete" asp-route-id="@item.Id" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Delete @item.Name?');"
+                                            aria-label="Delete @item.Name">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <span class="visually-hidden">Id:</span>@item.Id
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    </div>
+
+    <div class="table-responsive d-none d-md-block">
+        <table class="table tableprogress-bar-striped align-middle">
+            <thread class="table-light">
+                <tr>
+                    <th scope="col" style="width:8ch;">Id</th>
+                    <th scope="col" style="width:24ch;">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col" style="width:16ch;">Price</th>
+                    <th scope="col" style="width:22ch;">Actions</th>
+                </tr>
+
+            </thread>
+            <tbody>
+                @foreach (var item in Model!)
+                {
+                    <tr>
+                        <th scope="row">#@item.Id</th>
+                        <td>@item.Name</td>
+                        <td>@item.Description</td>
+                        <td>@item.Price.ToString("C")</td>
+                        <td>
+                            <a asp-area="Admin" asp-controller="Menu" asp-action="Edit" asp-route-id="@item.Id"
+                               class="btn btn-sm btn-outline-primary" aria-label="Edit @item.Name">Edit</a>
+                            <form method="post" asp-area="Admin" asp-controller="Menu" asp-action="Delete" asp-route-id="@item.Id" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-danger"
+                                        onclick="return confirm('Delete @item.Name?');"
+                                        aria-label="Delete @item.Name">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+        </table>
+    </div>
+    
+}

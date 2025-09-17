@@ -1,0 +1,60 @@
+﻿/* theme.css */
+
+body {
+    font-family: 'Marcellus', serif;
+    background-color: #ECE8E5;
+    color: #2f2f2f;
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    font-family: 'Parisienne', cursive;
+    color: #a3b18a;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.navbar {
+    background-color: #fffdf8;
+    border-bottom: 2px solid #a3b18a;
+}
+
+.nav-link {
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: #2f2f2f;
+}
+
+    .nav-link:hover {
+        color: #7d9770;
+    }
+
+footer {
+    background-color: #fffdf8;
+    color: #2f2f2f;
+    padding: 1rem 0;
+    text-align: center;
+    font-size: 0.9rem;
+    border-top: 1px solid #a3b18a;
+}
+
+.btn-primary {
+    background-color: #a3b18a;
+    border-color: #a3b18a;
+    color: #fff;
+}
+
+    .btn-primary:hover {
+        background-color: #7d9770;
+        border-color: #7d9770;
+    }
+
+.btn-outline-success {
+    border-color: #a3b18a;
+    color: #a3b18a;
+}
+
+    .btn-outline-success:hover {
+        background-color: #a3b18a;
+        color: #fff;
+    }

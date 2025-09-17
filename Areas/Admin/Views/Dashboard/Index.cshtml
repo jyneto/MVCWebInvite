@@ -1,0 +1,20 @@
+﻿@model MVCWebInvite.ViewModels.Admin.DashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h2 class="text-center">Admin Dashboard</h2>
+
+<div class="row text-center mt-4">
+    <div class="col">Guests: <strong>@(Model?.TotalGuests ?? 0)</strong></div>
+    <div class="col">Bookings: <strong>@(Model?.TotalBookings ?? 0)</strong></div>
+    <div class="col">Tables free: <strong>@(Model?.AvailableTables ?? 0)</strong></div>
+    <div class="col">Menu items: <strong>@(Model?.MenuItems ?? 0)</strong></div>
+</div>
+
+<div class="d-flex flex-column gap-3 mt-4">
+    <a asp-area="Admin" asp-controller="Menu" asp-action="Index" class="btn btn-outline-dark">Manage Menu</a>
+    <a asp-area="Admin" asp-controller="Booking" asp-action="Index" class="btn btn-outline-dark">Manage Booking</a>
+    <a asp-area="Admin" asp-controller="Guest" asp-action="Index" class="btn btn-outline-dark">Manage Guest</a>
+    <a asp-area="Admin" asp-controller="Table" asp-action="Index" class="btn btn-outline-dark">Manage Table</a>
+</div>

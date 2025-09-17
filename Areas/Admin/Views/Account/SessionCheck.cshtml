@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Session Check";
+    bool hasToken = ViewBag.HasToken ?? false;
+    string preview = ViewBag.TokenPreview as string ?? "";
+}
+
+<h3>Sessionstatus</h3>
+
+@if (hasToken)
+{
+    <div class="alert alert-success">
+        Token finns i Session ✅<br />
+        <small>Förhandsvisning: @preview</small>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        Ingen token i Session ❌<br />
+        <small>Logga in igen så att JWToken sparas.</small>
+    </div>
+}
+
+<a asp-controller="AdminMenu" asp-action="Index" class="btn btn-outline-secondary">Tillbaka</a>
