@@ -20,3 +20,10 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+@media (max-width: 991.98px) {
+    #navbarNav .navbar-nav {
+        align-items: center;
+    }
+}
+

@@ -1,4 +1,4 @@
-﻿namespace MVCWebInvite.Utilities
+﻿namespace MVCWebInvite.ViewModels.Account
 {
     public class LoginResponseDto
     {

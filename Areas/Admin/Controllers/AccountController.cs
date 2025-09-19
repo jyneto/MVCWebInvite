@@ -40,7 +40,7 @@ namespace MVCWebInvite.Areas.Admin.Controllers
                 return View(vm);
             }
 
-            var payload = await resp.Content.ReadFromJsonAsync<Utilities.LoginResponseDto>();
+            var payload = await resp.Content.ReadFromJsonAsync<ViewModels.Account.LoginResponseDto>();
             var tokenString = payload?.Token;
 
             if (string.IsNullOrWhiteSpace(tokenString))
@@ -82,8 +82,8 @@ namespace MVCWebInvite.Areas.Admin.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Remove("JWToken");
-            //TempData.Remove("SuccessMessage");
-            TempData["LogoutMessage"] = "You’ve been logged out successfully.";
+            TempData.Remove("SuccessMessage");
+            TempData["SuccessMessage"] = "You’ve been logged out successfully.";
             return RedirectToAction("Index", "Home", new { area = "" });
 
 

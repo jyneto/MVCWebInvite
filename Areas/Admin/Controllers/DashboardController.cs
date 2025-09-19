@@ -1,30 +1,42 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using MVCWebInvite.Models;
 using MVCWebInvite.ViewModels.Admin;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
 
 namespace MVCWebInvite.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class DashboardController : Controller
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IHttpClientFactory _http;
         private readonly ILogger<DashboardController> _logger;
-        public DashboardController(IHttpClientFactory httpClientFactory, ILogger<DashboardController> logger)
+
+        public DashboardController(IHttpClientFactory http, ILogger<DashboardController> logger)
         {
-            _httpClientFactory = httpClientFactory;
+            _http = http;
             _logger = logger;
         }
-        private HttpClient CreateAutorizationedClient(string clientName, string token) 
+
+        private HttpClient CreateAuthorizedClient(string token)
         {
-            var client = _httpClientFactory.CreateClient(clientName);
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            return client;
+            var c = _http.CreateClient("BackendAPI");
+            c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            return c;
         }
-                
-        
+
+        // helper: don't throw on non-200; tell us what failed
+        private static async Task<(bool ok, int code, string? err, List<T> data)>
+            GetListSafe<T>(HttpClient c, string path)
+        {
+            var resp = await c.GetAsync(path);
+            if (!resp.IsSuccessStatusCode)
+                return (false, (int)resp.StatusCode, $"{(int)resp.StatusCode} {resp.ReasonPhrase}", new());
+            var data = await resp.Content.ReadFromJsonAsync<List<T>>() ?? new();
+            return (true, 200, null, data);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -36,45 +48,34 @@ namespace MVCWebInvite.Areas.Admin.Controllers
 
             try
             {
-                var guestClient = CreateAutorizationedClient("GuestAPI", token);
-                var bookingClient = CreateAutorizationedClient("BookingAPI", token);
-                var tableClient = CreateAutorizationedClient("TableAPI", token);
-                var menuClient = CreateAutorizationedClient("MenuAPI", token);
+                var api = CreateAuthorizedClient(token);
 
-                var guests = await guestClient.GetFromJsonAsync<List<Guest>>("guests") ?? new();
-                var bookings = await bookingClient.GetFromJsonAsync<List<Booking>>("bookings") ?? new();
-                var tables = await tableClient.GetFromJsonAsync<List<Table>>("tables") ?? new();
-                var menuItems = await menuClient.GetFromJsonAsync<List<Menu>>("menu") ?? new();
+                // adjust paths to YOUR API routes (e.g. "Guests", "Bookings" etc.)
+                var g = await GetListSafe<Guest>(api, "guest");
+                var b = await GetListSafe<Booking>(api, "bookings");
+                var t = await GetListSafe<Table>(api, "tables");
+                var m = await GetListSafe<Menu>(api, "menu");
 
-                vm.TotalGuests = guests.Count;
-                vm.TotalBookings = bookings.Count;
-                vm.AvailableTables = tables.Count;
-                vm.MenuItems = menuItems.Count;
+                if (!g.ok || !b.ok || !t.ok || !m.ok)
+                {
+                    _logger.LogWarning("Dashboard load issues: guests={G} bookings={B} tables={T} menu={M}",
+                        g.err, b.err, t.err, m.err);
+                    // keep this message local to the dashboard
+                    TempData["DashboardError"] = "Failed when loading dashboard data. Please try again later.";
+                }
 
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError(ex, "HTTP request failed while loading dashboard data");
-                TempData["ErrorMessage"] = "Failed when loading dashboard data. Please try again later.";
-            }
-            catch(NotSupportedException ex)
-            {
-                _logger.LogError(ex, "The content type is not supported");
-                TempData["ErrorMessage"] = "Invalid server response";
-
-            }
-            catch(System.Text.Json.JsonException ex)
-            {  
-                _logger.LogError(ex, "Failed to parse error JSON response");
-                TempData["ErrorMessage"] = "Could not read server response";
+                vm.TotalGuests = g.data.Count;
+                vm.TotalBookings = b.data.Count;
+                vm.AvailableTables = t.data.Count; // or t.data.Count(x => x.IsAvailable)
+                vm.MenuItems = m.data.Count;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to load dashboard data");
-                TempData["ErrorMessage"] = "An unexpected error occurred when loading dasboard.";
+                _logger.LogError(ex, "Unexpected error while loading dashboard");
+                TempData["DashboardError"] = "Failed when loading dashboard data. Please try again later.";
             }
-          
-            return View(vm); 
+
+            return View(vm);
         }
     }
 }

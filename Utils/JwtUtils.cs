@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 
-namespace MVCWebInvite.Utilities
+namespace MVCWebInvite.Utils
 {
     public class JwtUtils
     {

@@ -3,6 +3,11 @@
     ViewData["Title"] = "Admin Dashboard";
 } *@
 
+@if (TempData["DashboardError"] is string derr)
+{
+    <div class="alert alert-warning text-center" role="alert">@derr</div>
+}
+
 <h2 class="text-center">Admin Dashboard</h2>
 
 <div class="row text-center mt-4">
