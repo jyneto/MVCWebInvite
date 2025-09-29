@@ -13,7 +13,9 @@ namespace MVCWebInvite.Models
         [Phone]
         public string? Phone { get; set; }
         public bool IsAttending { get; set; }
-   
+
         public string? Allergies { get; set; }
+        public int? TableId { get; set; }
+        public int? TableNumber { get; set; }
     }
 }

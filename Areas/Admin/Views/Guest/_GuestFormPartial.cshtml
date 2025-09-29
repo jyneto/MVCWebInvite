@@ -1,0 +1,48 @@
+﻿@using MVCWebInvite.ViewModels.Admin
+@model GuestFormViewModel
+
+<div class="mb-3">
+    <label asp-for="Guest.FullName" class="form-label"></label>
+    <input asp-for="Guest.FullName" class="form-control" />
+    <span asp-validation-for="Guest.FullName" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Guest.Email" class="form-label"></label>
+    <input asp-for="Guest.Email" class="form-control" />
+    <span asp-validation-for="Guest.Email" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Guest.Phone" class="form-label"></label>
+    <input asp-for="Guest.Phone" class="form-control" />
+    <span asp-validation-for="Guest.Phone" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Guest.IsAttending" class="form-label"></label>
+    <select asp-for="Guest.IsAttending" class="form-select">
+        <option value="">-- Select --</option>
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+    </select>
+    <span asp-validation-for="Guest.IsAttending" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Guest.Allergies" class="form-label"></label>
+    <input asp-for="Guest.Allergies" class="form-control" />
+    <span asp-validation-for="Guest.Allergies" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Guest.TableId" class="form-label">Table</label>
+    <select asp-for="Guest.TableId"
+            asp-items="@(new SelectList(Model.AvailableTables, "Id", "TableNumber", Model.Guest.TableId))"
+            class="form-select">
+        <option value="">-- Select Table --</option>
+    </select>
+
+    <span asp-validation-for="Guest.TableId" class="text-danger"></span>
+    <p>Available Tables Count: @Model.AvailableTables.Count</p>
+
+</div>

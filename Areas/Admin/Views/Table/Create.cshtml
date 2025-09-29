@@ -1,0 +1,21 @@
+﻿@model MVCWebInvite.Models.Table
+@{
+    ViewData["Title"] = "Create Table";
+}
+<div class="container py-3">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <h1 class="h3 mb-0">Create Table</h1> 
+        <a asp-area="Admin" asp-controller="Table" asp-action="Index" class="btn btn-outline-success btn-sm">Back to Tables</a>
+    </div>
+    <form asp-action="Create" method="post" class="row" g-3">
+        @Html.AntiForgeryToken()
+        @await Html.PartialAsync("_TableForm", Model)
+        <div class="col-12 d-flex gap-3 mt-3">
+            <button type="submit" class="btn btn-success">Save</button>
+            <a asp-area="Admin" asp-controller="Table" asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

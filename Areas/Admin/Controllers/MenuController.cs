@@ -12,29 +12,38 @@ namespace MVCWebInvite.Areas.Admin.Controllers
     [Area("Admin")]
     public class MenuController : Controller
     {
-        private readonly IHttpClientFactory _clientFactory;
+        //private readonly IHttpClientFactory _clientFactory;
         private readonly ILogger<MenuController> _logger;
-        public MenuController(IHttpClientFactory clientFactory, ILogger<MenuController> logger)
+        private readonly IAuthorizedClientProvider _authorizedClientProvider;
+
+        public MenuController(IAuthorizedClientProvider authorizedClientProvider, ILogger<MenuController> logger)
         {
-            _clientFactory = clientFactory;
+            _authorizedClientProvider = authorizedClientProvider;
             _logger = logger;
         }
-        private HttpClient CreateAuthorizedClient()
-        {
-            var token = HttpContext.Session.GetString("JWToken");
-            _logger.LogInformation("CreateAuthorizedClient called. Token: {HasToken}", string.IsNullOrEmpty(token) ? "null or empty" : "token");
-            if (string.IsNullOrWhiteSpace(token))
-                throw new InvalidOperationException("JWT token is missing in session.");
-
-            if (JwtUtils.IsJwtExpired(token))
-                throw new InvalidOperationException("JWT token has expired.");
-            //var client = _clientFactory.CreateClient("MenuAPI");
-            var client = _clientFactory.CreateClient("BackendAPI");
+        //public MenuController(IHttpClientFactory clientFactory, ILogger<MenuController> logger)
+        //{
+        //    _clientFactory = clientFactory;
+        //    _logger = logger;
+        //}
 
 
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-            return client;
-        }
+        //private HttpClient CreateAuthorizedClient()
+        //{
+        //    var token = HttpContext.Session.GetString("JWToken");
+        //    _logger.LogInformation("CreateAuthorizedClient called. Token: {HasToken}", string.IsNullOrEmpty(token) ? "null or empty" : "token");
+        //    if (string.IsNullOrWhiteSpace(token))
+        //        throw new InvalidOperationException("JWT token is missing in session.");
+
+        //    if (JwtUtils.IsJwtExpired(token))
+        //        throw new InvalidOperationException("JWT token has expired.");
+        //    var client = _clientFactory.CreateClient("BackendAPI");
+
+
+        //    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+        //    return client;
+        //}
+
 
         public IActionResult RedirectLogin(string? message = null)
         {
@@ -48,7 +57,8 @@ namespace MVCWebInvite.Areas.Admin.Controllers
         {
             try
             {
-                var client = CreateAuthorizedClient();
+                //var client = CreateAuthorizedClient();
+                var client = _authorizedClientProvider.GetClient();
                 var response = await client.GetAsync("menu");
                 if (!response.IsSuccessStatusCode)
                 {
@@ -84,7 +94,7 @@ namespace MVCWebInvite.Areas.Admin.Controllers
         {
             try
             {
-                _ = CreateAuthorizedClient();
+                var client = _authorizedClientProvider.GetClient();
                 return View();
             }
             catch (InvalidOperationException ex)
@@ -102,7 +112,7 @@ namespace MVCWebInvite.Areas.Admin.Controllers
                 return View(menuModel);
             try
             {
-                var client = CreateAuthorizedClient();
+                var client = _authorizedClientProvider.GetClient();
 
                 var response = await client.PostAsJsonAsync("menu", menuModel);
                 if (!response.IsSuccessStatusCode)
@@ -133,7 +143,7 @@ namespace MVCWebInvite.Areas.Admin.Controllers
         {
             try
             {
-                var client = CreateAuthorizedClient();
+                var client = _authorizedClientProvider.GetClient();
 
                 var response = await client.GetAsync($"menu/{id}");
                 if (!response.IsSuccessStatusCode)
@@ -172,7 +182,7 @@ namespace MVCWebInvite.Areas.Admin.Controllers
                 TempData["ErrorMessage"] = "An unexpected error occurred while fetching the menu item.";
                 return RedirectToAction("Index");
             }
-           
+
         }
 
         [HttpPost]
@@ -182,7 +192,7 @@ namespace MVCWebInvite.Areas.Admin.Controllers
             if (!ModelState.IsValid) return View(menuModel);
             try
             {
-                var client = CreateAuthorizedClient();
+                var client = _authorizedClientProvider.GetClient();
                 var response = await client.PutAsJsonAsync($"menu/{menuModel.Id}", new Menu
 
                 {
@@ -219,13 +229,14 @@ namespace MVCWebInvite.Areas.Admin.Controllers
                 return View(menuModel);
             }
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public  async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var client = CreateAuthorizedClient();
+                var client = _authorizedClientProvider.GetClient();
 
                 var response = await client.DeleteAsync($"menu/{id}");
                 if (!response.IsSuccessStatusCode)

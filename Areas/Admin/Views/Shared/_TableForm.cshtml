@@ -1,0 +1,15 @@
+﻿@model MVCWebInvite.Models.Table
+<div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+<div class="row g-3">
+   <div class="col-12 col-md-6">
+       <label asp-for="TableNumber" class="form-label">Table Number</label>
+       <input asp-for="TableNumber" class="form-control" inputmode="numeric"/>
+        <span asp-validation-for="TableNumber" class="text-danger"></span>
+   </div>
+
+   <div class="col-12 cold-md-6">
+         <label asp-for="Capacity" class="form-label">Capacity</label>
+         <input asp-for="Capacity" class="form-control" inputmode="numeric"/>
+        <span asp-validation-for="Capacity" class="text-danger"></span>
+   </div>
+</div>

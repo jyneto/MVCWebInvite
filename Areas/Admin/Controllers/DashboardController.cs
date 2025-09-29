@@ -1,6 +1,6 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MVCWebInvite.Models;
+using MVCWebInvite.Utils;
 using MVCWebInvite.ViewModels.Admin;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -10,20 +10,15 @@ namespace MVCWebInvite.Areas.Admin.Controllers
     [Area("Admin")]
     public class DashboardController : Controller
     {
-        private readonly IHttpClientFactory _http;
+        //private readonly IHttpClientFactory _http;
+        private readonly IAuthorizedClientProvider _authorizedClientProvider;
         private readonly ILogger<DashboardController> _logger;
+        private const string Resource = "bookings";
 
-        public DashboardController(IHttpClientFactory http, ILogger<DashboardController> logger)
+        public DashboardController(IAuthorizedClientProvider authorizedClientProvider, ILogger<DashboardController> logger)
         {
-            _http = http;
+            _authorizedClientProvider = authorizedClientProvider;
             _logger = logger;
-        }
-
-        private HttpClient CreateAuthorizedClient(string token)
-        {
-            var c = _http.CreateClient("BackendAPI");
-            c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            return c;
         }
 
         // helper: don't throw on non-200; tell us what failed
@@ -48,7 +43,7 @@ namespace MVCWebInvite.Areas.Admin.Controllers
 
             try
             {
-                var api = CreateAuthorizedClient(token);
+                var api = _authorizedClientProvider.GetClient();
 
                 // adjust paths to YOUR API routes (e.g. "Guests", "Bookings" etc.)
                 var g = await GetListSafe<Guest>(api, "guest");

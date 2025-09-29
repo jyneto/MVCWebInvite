@@ -1,0 +1,36 @@
+﻿@using MVCWebInvite.Models
+@{
+    var tables = ViewBag.Tables as List<Table>;
+    var guests = ViewBag.Guests as List<Guest>;
+}
+
+<h2>Select Table</h2>
+<table class="table">
+    <thead>
+        <tr><th>Table Number</th> <th>Capacity</th> <th>Select</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var table in tables)
+        {
+            <tr>
+                <td>@table.TableNumber</td>
+                <td>table.Capacity</td>
+                <td>
+                    <form method="post" asp-action="SelectTableGuest">
+                        <input type="hidden" name="tableId" value="@table.Id" />
+                        <select name="guestId" required>
+                            <option value="">Select Guest</option>
+                            @foreach (var guest in guests)
+                            {
+                                <option value="@guest.Id">@guest.FullName (@guest.Email)</option>
+                            }
+
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm">Select</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using MVCWebInvite.Models;
+using MVCWebInvite.Utils;
 using MVCWebInvite.ViewModels.Account;
 using System.Reflection;
 
@@ -17,6 +18,7 @@ namespace MVCWebInvite.Areas.Admin.Controllers
             _clientFactory = clientFactory;
             _logger = logger;
         }
+
         [HttpGet]
         public IActionResult Login()
         {

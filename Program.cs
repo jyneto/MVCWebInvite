@@ -1,3 +1,5 @@
+using MVCWebInvite.Utils;
+
 namespace MVCWebInvite
 {
     public class Program
@@ -34,6 +36,9 @@ namespace MVCWebInvite
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
+
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<IAuthorizedClientProvider, AuthorizedClientProvider>();
 
 
 

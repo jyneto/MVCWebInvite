@@ -1,0 +1,118 @@
+@model MVCWebInvite.ViewModels.Admin.BookingFormViewModel
+
+@{
+    ViewData["Title"] = "Create Booking";
+}
+
+@* <h1>Create Booking</h1> *@
+
+@* <form asp-area="Admin" asp-controller="Booking" asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="FK_TableId" class="form-label"></label>
+        <input asp-for="FK_TableId" class="form-control" />
+        <span asp-validation-for="FK_TableId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="FK_GuestId" class="form-label"></label>
+        <input asp-for="FK_GuestId" class="form-control" />
+        <span asp-validation-for="FK_GuestId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="StartTime" class="form-label"></label>
+        <input asp-for="StartTime" class="form-control" type="datetime-local" />
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="EndTime" class="form-label"></label>
+        <input asp-for="EndTime" class="form-control" type="datetime-local" />
+        <span asp-validation-for="EndTime" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="PartySize" class="form-label"></label>
+        <input asp-for="PartySize" class="form-control" />
+        <span asp-validation-for="PartySize" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-area="Admin" asp-controller="Booking" asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+ *@
+
+@* <h2>Create Booking</h2> *@
+@* <p>Table ID: @Model.FK_TableId</p>
+<p>Guest ID: @Model.FK_GuestId</p> *@
+@* 
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="FK_TableId" class="form-label d-none"></label>
+        <input type="hidden" asp-for="FK_TableId" />
+        <label asp-for="FK_GuestId" class="form-label d-none"></label>
+        <input type="hidden" asp-for="FK_GuestId" />
+    </div>
+   
+    <div class="mb-3">
+        <label asp-for="StartTime"></label>
+        <input asp-for="StartTime" type="datetime-local" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="EndTime"></label>
+        <input asp-for="EndTime" type="datetime-local" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="PartySize"></label>
+        <input asp-for="PartySize" type="number" class="form-control" min="1" />
+    </div>
+    <button type="submit" class="btn btn-success">Create Booking</button>
+    <a asp-area="Admin" asp-controller="Booking" asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} *@
+
+<div class="container py3">
+    <h1 class="h3 mb-3">Create Booking</h1>
+
+    <form asp-action="Create" method="post" class="row g-3">
+        @Html.AntiForgeryToken()
+        <div class="col-12">
+            <label class="form-label">Table</label>
+            <select accesskey="TableId" asp-items="Model.TableOptions" class="form-select" required>
+                <option value="">Select a table</option>
+                </select>
+            <span asp-validation-for="TableId" class="text-danger"></span>
+        </div>
+
+        <div class="col-12">
+            <label class="form-label">Guest</label>
+            <select accesskey="GuestId" asp-items="Model.GuestOptions" class="form-select" required>
+                <option value="">Select a guest</option>
+            </select>
+            <span asp-validation-for="GuestId" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Start Time</label>
+            <input asp-for="StartTime" type="datetime-local" class="form-control"/>
+            <span asp-validation-for="StartTime" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Party Size</label>
+            <input asp-for="PartySize" type="number" class="form-control"/>
+            <span asp-validation-for="PartySize" class="text-danger"></span>
+        </div>
+
+        <div class="col-12 d-flex gap-2">
+            <button type="submit" class="btn btn-success">Create Booking</button>
+            <a asp-area="Admin" asp-controller="Booking" asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+
+        <div class="col-12">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </div>
+    </form>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

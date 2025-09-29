@@ -1,6 +1,54 @@
-﻿@{
+﻿@model List<MVCWebInvite.Models.Table>
+
+@{
     ViewData["Title"] = "Page";
 }
-<h3>@ViewData["Title"]</h3>
-<p>Kommer snart…</p>
+
+<div class="container py-3">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <h1 class="h3 mb-0">Tables</h1>
+        <div class="d-flex flex-wrap gap-2">
+            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-success">Back to Dashboard</a>
+            <a asp-area="Admin" asp-controller="Table" asp-action="Create" class="btn btn-primary">Create Table</a>
+        </div>
+    </div>
+
+    @if(TempData["ErrorMessage"] is string err)
+    {
+        <div class="alert alert-danger">@err</div>
+    }
+    @if(TempData["SuccessMessage"] is string msg)
+    {
+        <div class="alert alert-success">@msg</div>
+    }
+   <div class="table-responsive">
+    <table class="table table-striped align-middle mb-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Table Number</th>
+                <th>Capacity</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var table in Model)
+            {
+                <tr>
+                    <td>@table.Id</td>
+                    <td>@table.TableNumber</td>
+                    <td>@table.Capacity</td>
+                    <td class="text-end">
+                        <a asp-area="Admin" asp-controller="Table" asp-action="Edit" asp-route-id="@table.Id" class="btn btn-sm btn-warning m-2">Edit</a>
+                        <form asp-area="Admin" asp-controller="Table" asp-action="Delete" asp-route-id="@table.Id" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this table?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+    </table>
+   </div>
+</div>
 

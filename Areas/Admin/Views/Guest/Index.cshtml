@@ -1,7 +1,59 @@
-﻿
-@{
-    ViewData["Title"] = "Page";
-}
-<h3>@ViewData["Title"]</h3>
-<p>Kommer snart…</p>
+﻿@model List<MVCWebInvite.Models.Guest>
 
+@{
+    ViewData["Title"] = "Guest";
+}
+
+<h1>Guest</h1>
+
+@if (TempData["ErrorMessage"] is string err)
+{
+    <div class="alert alert-danger">@err</div>
+}
+@if (TempData["SuccessMessage"] is string msg)
+{
+    <div class="alert alert-success">@msg</div>
+}
+
+
+<div class="d-flex flex-wrap justify-content-between gap-2 mb-3">
+    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-success">Back to Dashboard</a>
+
+    <a asp-area="Admin" asp-controller="Guest" asp-action="Create" class="btn btn-primary">Create Guest</a>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>FullName</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Allergies</th>
+            <th>TableNr.</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var guest in Model)
+        {
+            <tr>
+                <td>@guest.Id</td>
+                <td>@guest.FullName</td>
+                <td>@guest.Email</td>
+                <td>@guest.Phone</td>
+                <td>@(guest.IsAttending ? "Attending" : "Not Attending")</td>
+                <td>@guest.Allergies</td>
+                <td>@guest.TableNumber</td>
+                <td>
+                    <a asp-area="Admin" asp-controller="Guest" asp-action="Edit" asp-route-id="@guest.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <form asp-area="Admin" asp-controller="Guest" asp-action="Delete" asp-route-id="@guest.Id" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this guest?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
