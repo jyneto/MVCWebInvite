@@ -10,7 +10,7 @@ namespace MVCWebInvite.Areas.Admin.Controllers
     [Area("Admin")]
     public class DashboardController : Controller
     {
-        //private readonly IHttpClientFactory _http;
+       
         private readonly IAuthorizedClientProvider _authorizedClientProvider;
         private readonly ILogger<DashboardController> _logger;
         private const string Resource = "bookings";
@@ -45,7 +45,7 @@ namespace MVCWebInvite.Areas.Admin.Controllers
             {
                 var api = _authorizedClientProvider.GetClient();
 
-                // adjust paths to YOUR API routes (e.g. "Guests", "Bookings" etc.)
+               
                 var g = await GetListSafe<Guest>(api, "guest");
                 var b = await GetListSafe<Booking>(api, "bookings");
                 var t = await GetListSafe<Table>(api, "tables");
@@ -55,13 +55,13 @@ namespace MVCWebInvite.Areas.Admin.Controllers
                 {
                     _logger.LogWarning("Dashboard load issues: guests={G} bookings={B} tables={T} menu={M}",
                         g.err, b.err, t.err, m.err);
-                    // keep this message local to the dashboard
+                   
                     TempData["DashboardError"] = "Failed when loading dashboard data. Please try again later.";
                 }
 
                 vm.TotalGuests = g.data.Count;
                 vm.TotalBookings = b.data.Count;
-                vm.AvailableTables = t.data.Count; // or t.data.Count(x => x.IsAvailable)
+                vm.AvailableTables = t.data.Count; 
                 vm.MenuItems = m.data.Count;
             }
             catch (Exception ex)

@@ -3,6 +3,7 @@
     public interface IAuthorizedClientProvider
     {
         HttpClient GetClient();
+        HttpClient GetAnonClient();
        
     }
     

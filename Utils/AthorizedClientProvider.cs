@@ -23,5 +23,11 @@
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             return client;
         }
+
+       public HttpClient GetAnonClient()
+        {
+            var client = _httpClientFactory.CreateClient("BackendAPI");
+            return client;
+        }
     }
 }

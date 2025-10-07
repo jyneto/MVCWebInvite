@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using MVCWebInvite.Models;
 using MVCWebInvite.Utils;
+using System.Security.Cryptography;
 
 namespace MVCWebInvite.Areas.Admin.Controllers
 {
@@ -127,15 +129,24 @@ namespace MVCWebInvite.Areas.Admin.Controllers
             {
                 var api = _authorizedClientProvider.GetClient();
                 var resp = await api.DeleteAsync($"{Resource}/{id}");
-                if (!resp.IsSuccessStatusCode)
-                    TempData["ErrorMessage"] = $"Failed to delete table. {(int)resp.StatusCode} {resp.ReasonPhrase}";
-                else
-                    TempData["SuccessMessage"] = "Table deleted.";
+
+                if (resp.IsSuccessStatusCode) 
+                {
+                    TempData["SuccessMessage"] = "Table deleted";
+                }
+                else 
+                {
+                    var body = await resp.Content.ReadAsStringAsync();
+                    TempData["ErrorMessage"] = $"Failed to delete table. {(int)resp.StatusCode} {resp.ReasonPhrase}. {body}";
+                
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch (InvalidOperationException ex) { _logger.LogWarning("Token issue on Table/Delete: {Msg}", ex.Message); return RedirectLogin(ex.Message); }
-            catch (HttpRequestException ex) { _logger.LogError(ex, "Table/Delete HTTP error"); TempData["ErrorMessage"] = "Network error."; return RedirectToAction(nameof(Index)); }
-            catch (Exception ex) { _logger.LogError(ex, "Table/Delete error"); TempData["ErrorMessage"] = "Unexpected error."; return RedirectToAction(nameof(Index)); }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "Table/Delete error");
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

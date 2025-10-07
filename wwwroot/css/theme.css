@@ -19,15 +19,19 @@ h1, h2, h3 {
     border-bottom: 2px solid #a3b18a;
 }
 
+
 .nav-link {
     font-weight: 500;
     font-size: 1.1rem;
     color: #2f2f2f;
 }
 
-    .nav-link:hover {
-        color: #7d9770;
-    }
+.sticky-top {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
 
 footer {
     background-color: #fffdf8;
@@ -54,7 +58,7 @@ footer {
     color: #a3b18a;
 }
 
-    .btn-outline-success:hover {
-        background-color: #a3b18a;
-        color: #fff;
-    }
+.btn-outline-success:hover {
+    background-color: #a3b18a;
+    color: #fff;
+}

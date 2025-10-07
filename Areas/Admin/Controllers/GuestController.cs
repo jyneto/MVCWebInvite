@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MVCWebInvite.Models;
 using MVCWebInvite.Utils;
+using MVCWebInvite.ViewModels;
 using MVCWebInvite.ViewModels.Admin;
+using MVCWebInvite.ViewModels.Menu;
+using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
@@ -10,33 +13,11 @@ namespace MVCWebInvite.Areas.Admin.Controllers
     [Area("Admin")]
     public class GuestController : Controller
     {
-        //private readonly IHttpClientFactory _clientFactory;
         private readonly IAuthorizedClientProvider _authorizedClientProvider;
         private readonly ILogger<GuestController> _logger;
 
         private const string Resource = "guest"; // matcha din WebAPI-route
-
-        //public GuestController(IHttpClientFactory clientFactory, ILogger<GuestController> logger)
-        //{
-        //    _clientFactory = clientFactory;
-        //    _logger = logger;
-        //}
-
-        //private HttpClient CreateAuthorizedClient()
-        //{
-        //    var token = HttpContext.Session.GetString("JWToken");
-        //    _logger.LogInformation("CreateAuthorizedClient called. Token: {HasToken}", string.IsNullOrEmpty(token) ? "null or empty" : "token");
-
-        //    if (string.IsNullOrWhiteSpace(token))
-        //        throw new InvalidOperationException("JWT token is missing in session.");
-        //    if (JwtUtils.IsJwtExpired(token))
-        //        throw new InvalidOperationException("JWT token has expired.");
-
-        //    var client = _clientFactory.CreateClient("BackendAPI");
-        //    client.DefaultRequestHeaders.Authorization =
-        //        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-        //    return client;
-        //}
+        
         public GuestController(IAuthorizedClientProvider authorizedClientProvider, ILogger<GuestController> logger)
         {
             _authorizedClientProvider = authorizedClientProvider;
@@ -161,33 +142,7 @@ namespace MVCWebInvite.Areas.Admin.Controllers
             catch (Exception ex) { _logger.LogError(ex, "Guest/Edit POST error"); ModelState.AddModelError("", "Unexpected error."); return View(vModel); }
         }
 
-        // DELETE
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                var api = _authorizedClientProvider.GetClient();
-                var resp = await api.DeleteAsync($"{Resource}/{id}");
-                if (!resp.IsSuccessStatusCode)
-                    TempData["ErrorMessage"] = $"Failed to delete guest. {(int)resp.StatusCode} {resp.ReasonPhrase}";
-                else
-                    TempData["SuccessMessage"] = "Guest deleted.";
-                return RedirectToAction(nameof(Index));
-            }
-            catch (InvalidOperationException ex) { _logger.LogWarning("Token issue on Guest/Delete: {Msg}", ex.Message); return RedirectLogin(ex.Message); }
-            catch (HttpRequestException ex) { _logger.LogError(ex, "Guest/Delete HTTP error"); TempData["ErrorMessage"] = "Network error."; return RedirectToAction(nameof(Index)); }
-            catch (Exception ex) { _logger.LogError(ex, "Guest/Delete error"); TempData["ErrorMessage"] = "Unexpected error."; return RedirectToAction(nameof(Index)); }
-        }
 
-        public async Task<IActionResult> SubmitRSVP(string guestName, bool IsAttending)
-        {
-            var response = new RsvpResponse { GuestName = guestName, IsAttending = IsAttending };
-            var client = _authorizedClientProvider.GetClient(); 
-            await client.PostAsJsonAsync("api/rsvp",response);
-            return View("ThankYou");
-        }
         public async Task<IActionResult> RsvpForm()
         {
             try
@@ -225,6 +180,41 @@ namespace MVCWebInvite.Areas.Admin.Controllers
                 _logger.LogError(ex, "Error fetching tables");
                 return new List<Table>();
             }
+        }
+
+        // DELETE
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var api = _authorizedClientProvider.GetClient();
+                var resp = await api.DeleteAsync($"{Resource}/{id}");
+                if (resp.IsSuccessStatusCode)
+                {
+                    TempData["SuccessMessage"] = "Guest deleted.";
+                }
+                else if (resp.StatusCode == System.Net.HttpStatusCode.Conflict)
+                {
+                    var msg = await resp.Content.ReadAsStringAsync();
+                    TempData["ErrorMessage"] = msg; // e.g. "Cannot delete guest with existing bookings."
+                }
+                else if (resp.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    TempData["ErrorMessage"] = "Guest not found.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = $"{(int)resp.StatusCode} {resp.ReasonPhrase}";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Guest/Delete error");
+                TempData["ErrorMessage"] = "Unexpected error.";
+            }
+            return RedirectToAction(nameof(Index));
         }
 
     }

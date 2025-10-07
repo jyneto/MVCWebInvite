@@ -1,62 +1,4 @@
-﻿@* @model List<MVCWebInvite.Models.Booking>
-
-@{
-    ViewData["Title"] = "Bookings";
-}
-
-<h1>Bookings</h1>
-
-@if (TempData["ErrorMessage"] is string err)
-{
-    <div class="alert alert-danger">@err</div>
-}
-@if (TempData["SuccessMessage"] is string msg)
-{
-    <div class="alert alert-success">@msg</div>
-}
-
-
-<div class="d-flex flex-wrap justify-content-between gap-2 mb-3">
-<a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-success">Back to Dashboard</a>
-
-<a asp-area="Admin" asp-controller="Booking" asp-action="Create" class="btn btn-primary">Create Booking</a>
-</div>
-
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Table</th>
-            <th>Guest</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Party Size</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var booking in Model)
-        {
-            <tr>
-                <td>@booking.Id</td>
-                <td>@booking.FK_TableId</td>
-                <td>@booking.FK_GuestId</td>
-                <td>@booking.StartTime</td>
-                <td>@booking.EndTime</td>
-                <td>@booking.PartySize</td>
-                <td>
-                    <a asp-area="Admin" asp-controller="Booking" asp-action="Edit" asp-route-id="@booking.Id" class="btn btn-sm btn-warning">Edit</a>
-                    <form asp-area="Admin" asp-controller="Booking" asp-action="Delete" asp-route-id="@booking.Id" method="post" class="d-inline">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this booking?');">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table> *@
-
-@model List<MVCWebInvite.ViewModels.Admin.BookingListItemVm>
+﻿@model List<MVCWebInvite.ViewModels.Admin.BookingListItemVm>
 
 @{
     ViewData["Title"] = "Bookings";
@@ -96,8 +38,14 @@
                     {
                         <tr>
                             <td>@b.Id</td>
-                            <td>@(b.TableNumber ?? $"#{b.TableId}")</td>
-                            <td>@(b.GuestName ?? $"ID {b.GuestId}")</td>
+                            <td>
+                                @(b.TableNumber != null ? b.TableNumber : (b.Id != null ? $"#{b.Id}" : "No Table"))
+               
+                            </td>
+                            <td>
+                                @(b.GuestName != null ? b.GuestName : (b.GuestId != null ? $"ID {b.GuestId}" : "No Guest"))
+              
+                            </td>
                             <td>@b.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
                             <td>@b.EndTime.ToString("yyyy-MM-dd HH:mm")</td>
                             <td>@b.PartySize</td>
@@ -113,4 +61,5 @@
                 </tbody>
         </table>
     </div>
-</div>
+  </div>
+  </div>

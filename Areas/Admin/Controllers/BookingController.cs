@@ -33,185 +33,7 @@ namespace MVCWebInvite.Areas.Admin.Controllers
             return RedirectToAction("Login", "Account", new { area = "Admin" });
         }
 
-        // LIST
-        //public async Task<IActionResult> Index()
-        //{
-        //    try
-        //    {
-        //        var api = _authorizedClientProvider.GetClient();
-        //        var resp = await api.GetAsync(Resource);
-        //        if (!resp.IsSuccessStatusCode)
-        //        {
-        //            TempData["ErrorMessage"] = $"Failed to load guests. {(int)resp.StatusCode} {resp.ReasonPhrase}";
-        //            return View(new List<Booking>());
-        //        }
-        //        var items = await resp.Content.ReadFromJsonAsync<List<Booking>>() ?? new();
-        //        return View(items);
-        //    }
-        //    catch (InvalidOperationException ex) { _logger.LogWarning("Token issue on Guest/Index: {Msg}", ex.Message); return RedirectLogin(ex.Message); }
-        //    catch (HttpRequestException ex) { _logger.LogError(ex, "Booking/Index HTTP error"); TempData["ErrorMessage"] = "Network error when loading bookings."; return View(new List<Booking>()); }
-        //    catch (Exception ex) { _logger.LogError(ex, "Booking/Index error"); TempData["ErrorMessage"] = "Unexpected error."; return View(new List<Booking>()); }
-        //}
-
-        //[HttpGet]
-        //public IActionResult Create(int tableId, int guestId)
-        //{
-        //    var booking = new Booking
-        //    {
-        //        FK_TableId = tableId,
-        //        FK_GuestId = guestId
-        //    };
-        //    return View(booking);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create(Booking model)
-        //{
-        //    if (!ModelState.IsValid) return View(model);
-        //    try
-        //    {
-        //        var api = _authorizedClientProvider.GetClient();
-        //        var resp = await api.PostAsJsonAsync(Resource, model);
-        //        if (!resp.IsSuccessStatusCode)
-        //        {
-        //            ModelState.AddModelError("", $"Failed to create guest. {(int)resp.StatusCode} {resp.ReasonPhrase}");
-        //            return View(model);
-        //        }
-        //        TempData["SuccessMessage"] = "Guest created successfully.";
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch (InvalidOperationException ex) { _logger.LogWarning("Token issue on Guest/Create: {Msg}", ex.Message); return RedirectLogin(ex.Message); }
-        //    catch (HttpRequestException ex) { _logger.LogError(ex, "Guest/Create HTTP error"); ModelState.AddModelError("", "Network error."); return View(model); }
-        //    catch (Exception ex) { _logger.LogError(ex, "Guest/Create error"); ModelState.AddModelError("", "Unexpected error."); return View(model); }
-        //}
-
-        //// EDIT
-        //[HttpGet]
-        //public async Task<IActionResult> Edit(int id)
-        //{
-        //    try
-        //    {
-        //        var api = _authorizedClientProvider.GetClient();
-        //        var resp = await api.GetAsync($"{Resource}/{id}");
-        //        if (!resp.IsSuccessStatusCode)
-        //        {
-        //            TempData["ErrorMessage"] = $"Failed to fetch guest. {(int)resp.StatusCode} {resp.ReasonPhrase}";
-        //            return RedirectToAction(nameof(Index));
-        //        }
-        //        var item = await resp.Content.ReadFromJsonAsync<Booking>();
-        //        if (item == null) { TempData["ErrorMessage"] = "Guest not found."; return RedirectToAction(nameof(Index)); }
-        //        return View(item);
-        //    }
-        //    catch (InvalidOperationException ex) { _logger.LogWarning("Token issue on Guest/Edit GET: {Msg}", ex.Message); return RedirectLogin(ex.Message); }
-        //    catch (HttpRequestException ex) { _logger.LogError(ex, "Guest/Edit GET HTTP error"); TempData["ErrorMessage"] = "Network error."; return RedirectToAction(nameof(Index)); }
-        //    catch (Exception ex) { _logger.LogError(ex, "Guest/Edit GET error"); TempData["ErrorMessage"] = "Unexpected error."; return RedirectToAction(nameof(Index)); }
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(Booking model)
-        //{
-        //    if (!ModelState.IsValid) return View(model);
-        //    try
-        //    {
-        //        var api = _authorizedClientProvider.GetClient();
-        //        var resp = await api.PutAsJsonAsync($"{Resource}/{model.Id}", model);
-        //        if (!resp.IsSuccessStatusCode)
-        //        {
-        //            ModelState.AddModelError("", $"Failed to update guest. {(int)resp.StatusCode} {resp.ReasonPhrase}");
-        //            return View(model);
-        //        }
-        //        TempData["SuccessMessage"] = "Guest updated successfully.";
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch (InvalidOperationException ex) { _logger.LogWarning("Token issue on Guest/Edit POST: {Msg}", ex.Message); return RedirectLogin(ex.Message); }
-        //    catch (HttpRequestException ex) { _logger.LogError(ex, "Guest/Edit POST HTTP error"); ModelState.AddModelError("", "Network error."); return View(model); }
-        //    catch (Exception ex) { _logger.LogError(ex, "Guest/Edit POST error"); ModelState.AddModelError("", "Unexpected error."); return View(model); }
-        //}
-
-        //// DELETE
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    try
-        //    {
-        //        var api = _authorizedClientProvider.GetClient();
-        //        var resp = await api.DeleteAsync($"{Resource}/{id}");
-        //        if (!resp.IsSuccessStatusCode)
-        //            TempData["ErrorMessage"] = $"Failed to delete guest. {(int)resp.StatusCode} {resp.ReasonPhrase}";
-        //        else
-        //            TempData["SuccessMessage"] = "Guest deleted.";
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch (InvalidOperationException ex) { _logger.LogWarning("Token issue on Guest/Delete: {Msg}", ex.Message); return RedirectLogin(ex.Message); }
-        //    catch (HttpRequestException ex) { _logger.LogError(ex, "Guest/Delete HTTP error"); TempData["ErrorMessage"] = "Network error."; return RedirectToAction(nameof(Index)); }
-        //    catch (Exception ex) { _logger.LogError(ex, "Guest/Delete error"); TempData["ErrorMessage"] = "Unexpected error."; return RedirectToAction(nameof(Index)); }
-        //}
-
-        //[HttpGet]
-        //public async Task<IActionResult> SelectTableGuest()
-        //{
-        //    var api = _authorizedClientProvider.GetClient();
-        //    var tablesResp = await api.GetAsync("tables");
-        //    var guestsResp = await api.GetAsync("guests");
-        //    var tables = await tablesResp.Content.ReadFromJsonAsync<List<Table>>() ?? new();
-        //    var guests = await guestsResp.Content.ReadFromJsonAsync<List<Guest>>() ?? new();
-        //    ViewBag.Tables = tables;
-        //    ViewBag.Guests = guests;
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //public IActionResult SelectTableGuest(int tableId, int guestId)
-        //{
-        //    // Redirect to Create with selected IDs as route values
-        //    return RedirectToAction("Create", new { tableId, guestId });
-        //}
-
-        //public async Task<IActionResult> Index()
-        //{
-        //    try
-        //    {
-        //        var api = _authorizedClientProvider.GetClient();
-
-        //        var bookingResp = await api.GetAsync(Resource);
-        //        if (!bookingResp.IsSuccessStatusCode)
-        //        {
-        //            TempData["ErrorMessage"] = $"Failed to load bookings. {(int)bookingResp.StatusCode} {bookingResp.ReasonPhrase}";
-        //            return View(new List<ViewModels.Admin.BookingListItemVm>());
-        //        }
-        //        var bookings = await bookingResp.Content.ReadFromJsonAsync<List<Booking>>() ?? new();
-
-        //        var tables = await api.GetFromJsonAsync<List<Table>>("tables") ?? new();
-        //        var guests = await api.GetFromJsonAsync<List<Guest>>("guest") ?? new();
-
-        //        var vm = bookings.Select(b => 
-        //        {
-        //            var table = tables.FirstOrDefault(t => t.Id == b.FK_TableId);
-        //            var guest = guests.FirstOrDefault(g => g.Id == b.FK_GuestId);
-        //            return new ViewModels.Admin.BookingListItemVm
-        //            {
-        //                Id = b.Id,
-        //                TableId = b.FK_TableId,
-        //                TableNumber = tables?.FirstOrDefault(t => t.Id == b.FK_TableId)?.TableNumber.ToString(),
-        //                GuestId = b.FK_GuestId,
-        //                GuestName = guests.FirstOrDefault(g => g.Id == b.FK_GuestId)?.FullName,
-        //                StartTime = b.StartTime.ToLocalTime(),
-        //                EndTime = b.EndTime.ToLocalTime(),
-        //                PartySize = b.PartySize
-        //            };
-        //        }).ToList();
-        //        return View(vm);
-        //    }
-        //    catch (InvalidOperationException ex) { _logger.LogWarning("Token issue on Booking/Index: {Msg}", ex.Message); return RedirectLogin(ex.Message); }
-        //    catch (HttpRequestException ex) { _logger.LogError(ex, "Booking/Index HTTP error"); TempData["ErrorMessage"] = "Network error when loading bookings."; return View(new List<ViewModels.Admin.BookingListItemVm>()); }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Booking/Index error"); TempData["ErrorMessage"] = "Unexpected error."; return View(new List<ViewModels.Admin.BookingListItemVm>());
-        //    }
-        //}
+       
 
         public async Task<IActionResult> Index()
         {
@@ -280,7 +102,6 @@ namespace MVCWebInvite.Areas.Admin.Controllers
                     TableId = vm.TableId,
                     GuestId = vm.GuestId,
                     StartTime = vm.StartTime.ToUniversalTime(),
-                    //EndTime = vm.StartTime.AddHours(2).ToUniversalTime(), // Default duration 2 hours
                     PartySize = vm.PartySize
                 };
                 var resp = await api.PostAsJsonAsync(Resource, newBooking);
@@ -305,23 +126,25 @@ namespace MVCWebInvite.Areas.Admin.Controllers
                 return View(vm);
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             try
             {
                 var api = _authorizedClientProvider.GetClient();
-                var resp = await api.GetAsync($"{Resource}/{id}");
-                if (!resp.IsSuccessStatusCode)
+
+                //booking
+                var booking = await api.GetFromJsonAsync<Booking>($"{Resource}/{id}");
+                if (booking == null)
                 {
-                    TempData["ErrorMessage"] = $"Failed to fetch booking. {(int)resp.StatusCode} {resp.ReasonPhrase}";
+                    TempData["ErrorMessage"] = "Booking not found.";
                     return RedirectToAction(nameof(Index));
                 }
-                var booking = await resp.Content.ReadFromJsonAsync<Booking>();
-                if (booking == null) { TempData["ErrorMessage"] = "Booking not found."; return RedirectToAction(nameof(Index)); }
 
-                var tables = await api.GetFromJsonAsync<List<Table>>("tables") ?? new();
+                //lists
                 var guests = await api.GetFromJsonAsync<List<Guest>>("guest") ?? new();
+                var tables = await api.GetFromJsonAsync<List<Table>>("tables") ?? new();
 
                 var vm = new BookingFormViewModel
                 {
@@ -347,16 +170,14 @@ namespace MVCWebInvite.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var apiX = _authorizedClientProvider.GetClient();
-                var tablesX = await apiX.GetFromJsonAsync<List<Table>>("tables") ?? new();
-                var guestsX = await apiX.GetFromJsonAsync<List<Guest>>("guest") ?? new();
-                vm.TableOptions = tablesX.Select(t => new SelectListItem($"Table {t.TableNumber} (cap {t.Capacity})", t.Id.ToString(), t.Id == vm.TableId));
-                vm.GuestOptions = guestsX.Select(g => new SelectListItem(g.FullName ?? $"Guest {g.Id}", g.Id.ToString(), g.Id == vm.GuestId));
+                await PopulateLists(vm);
                 return View(vm);
             }
+
             try
             {
                 var api = _authorizedClientProvider.GetClient();
+
                 var dto = new MVCWebInvite.Models.ApiDtos.BookingUpdateDto
                 {
                     Id = vm.Id,
@@ -366,15 +187,19 @@ namespace MVCWebInvite.Areas.Admin.Controllers
                     PartySize = vm.PartySize
                 };
                 var resp = await api.PutAsJsonAsync($"{Resource}/{vm.Id}", dto);
+
                 if (!resp.IsSuccessStatusCode)
                 {
                     var body = await resp.Content.ReadAsStringAsync();
-                    ModelState.AddModelError("", $"Failed to update booking. {(int)resp.StatusCode} {resp.ReasonPhrase}. {body}");
-                    var tablesX = await api.GetFromJsonAsync<List<Table>>("tables") ?? new();
-                    var guestsX = await api.GetFromJsonAsync<List<Guest>>("guest") ?? new();
-                    vm.TableOptions = tablesX.Select(t => new SelectListItem($"Table {t.TableNumber} (cap {t.Capacity})", t.Id.ToString(), t.Id == vm.TableId));
-                    vm.GuestOptions = guestsX.Select(g => new SelectListItem(g.FullName ?? $"Guest {g.Id}", g.Id.ToString(), g.Id == vm.GuestId));
+                    if ((int)resp.StatusCode == 400 || (int)resp.StatusCode == 409)
+                        ModelState.AddModelError("", body);
+
+                    else
+                        ModelState.AddModelError("", $"{(int)resp.StatusCode}");
+                    await PopulateLists(vm);
                     return View(vm);
+
+                  
                 }
                 TempData["SuccessMessage"] = "Booking updated successfully.";
                 return RedirectToAction(nameof(Index));
@@ -383,10 +208,51 @@ namespace MVCWebInvite.Areas.Admin.Controllers
             {
                 _logger.LogError(ex, "Booking/Edit POST error");
                 ModelState.AddModelError("", "Unexpected error.");
+                await PopulateLists(vm);
                 return View(vm);
 
             }
         }
-        
+
+
+        private async Task PopulateLists(BookingFormViewModel vm)
+        {
+            var api = _authorizedClientProvider.GetClient();
+            var tables = await api.GetFromJsonAsync<List<Table>>("tables") ?? new();
+            var guests = await api.GetFromJsonAsync<List<Guest>>("guest") ?? new();
+
+            vm.TableOptions = tables.Select(t =>
+                new SelectListItem($"Table {t.TableNumber} (cap {t.Capacity})", t.Id.ToString(), t.Id == vm.TableId));
+
+            vm.GuestOptions = guests.Select(g =>
+                new SelectListItem(g.FullName ?? $"Guest {g.Id}", g.Id.ToString(), g.Id == vm.GuestId));
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var api = _authorizedClientProvider.GetClient();
+                var resp = await api.DeleteAsync($"{Resource}/{id}");
+                if (resp.IsSuccessStatusCode)
+                    TempData["SuccessMessage"] = "Booking deleted.";
+                else if (resp.StatusCode == System.Net.HttpStatusCode.Conflict)
+                    TempData["ErrorMessage"] = await resp.Content.ReadAsStringAsync();
+                else if (resp.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    TempData["ErrorMessage"] = "Booking not found.";
+                else
+                    TempData["ErrorMessage"] = $"{(int)resp.StatusCode} {resp.ReasonPhrase}";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Guest/Delete error");
+                TempData["ErrorMessage"] = "Unexpected error.";
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
     }
-}   
+}

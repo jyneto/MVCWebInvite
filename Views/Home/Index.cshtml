@@ -1,36 +1,259 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model MVCWebInvite.ViewModels.HomePageVm
+
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="scroll-container pt-5 mt-5" data-bs-spy="scroll" data-bs-target"#navbar" data-bs-offset="70" tabindex="0">
+<!-- enable scrollspy locally -->
+@section Head {
+    <style>
+        .hero {
+            background: #fffdf8;
+            border: 2px solid #a3b18a1a;
+            border-radius: .75rem;
+        }
 
-    <section id="home" class="p-5 text-center bg-light">
-        <h1>Welcome to our wedding!</h1>
-        <p>Let´s celebrate love and meet our family!</p>
+        .timeline-dot {
+            width: .75rem;
+            height: .75rem;
+            border-radius: 50%;
+            background: #a3b18a;
+            display: inline-block;
+            margin-right: .5rem;
+        }
+    </style>
+}
+
+<div class="container" data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-offset="90" tabindex="0">
+    <!-- HERO / HOME -->
+    <section id="home" class="py-5">
+        <div class="hero p-4 p-md-5 text-center">
+            <h1 class="display-5">Welcome to our wedding!</h1>
+            <p class="lead mb-0">Let’s celebrate love together on <strong>16 August 2026</strong>.</p>
+        </div>
     </section>
 
+    <!-- OUR STORY -->
+    <section id="story" class="py-5">
+        <h2 class="section-title">Our Story</h2>
+        <div class="row g-4 align-items-center">
+            <div class="col-md-6">
+                <p>
+                    We met by chance, grew together by choice, and now we’re excited to celebrate the next chapter
+                    with the people we love most <em>you</em>. Thank you for being part of our journey!
+                </p>
+                <ul class="list-unstyled">
+                    <li><span class="timeline-dot"></span> 2018 — We met</li>
+                    <li><span class="timeline-dot"></span> 2022 — We moved in our home</li>
+                    <li><span class="timeline-dot"></span> 2023 — We got Love</li>
+                    <li><span class="timeline-dot"></span> 2025 — We said “Yes”</li>
+                    <li><span class="timeline-dot"></span> 2026 — We celebrate!</li>
+
+                </ul>
+            </div>
+            @* <div class="col-md-6"> *@
+                <div class="col-md-6 d-flex justify-content-center">
+
+                <div class="col-md-6">
+                    <img src="https://plus.unsplash.com/premium_photo-1674581215484-e6242a37c51e?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                         class="img-fluid rounded shadow-sm"
+                         alt="Our story">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EVENT -->
+    <section id="event" class="py-5">
+        <h2 class="section-title">Event</h2>
+
+        <div class="row g-4">
+            <!-- Ceremony -->
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="h4">Ceremony</h3>
+                        <p class="mb-2"><strong>Date:</strong> 16 August 2026</p>
+                        <p class="mb-2"><strong>Time:</strong> 14:00</p>
+                        <p class="mb-2"><strong>Location:</strong> Rose Garden Chapel, Stockholm</p>
+                        <p class="mb-2"><strong>Dress code:</strong> Dressy casual</p>
+                        <p class="mb-0"><strong>Seating:</strong> Ushers will guide you to your seats.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reception -->
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="h4">Reception</h3>
+                        <p class="mb-2"><strong>Time:</strong> 17:30 – late</p>
+                        <p class="mb-2"><strong>Location:</strong> Lakeside Barn, Stockholm</p>
+                        <ul class="mb-2">
+                            <li>Cocktail hour</li>
+                            <li>Dinner</li>
+                            <li>Dancing</li>
+                        </ul>
+                        <p class="mb-0"><strong>Dress code:</strong> Wedding-appropriate, relaxed & comfortable.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accommodation & Travel -->
+        <div class="row g-4 mt-1">
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="h5">Accommodation & Travel</h4>
+                        <ul class="mb-0">
+                            <li>Hotel Aurora (5 min from reception)</li>
+                            <li>Hotel City Central (near the chapel)</li>
+                            <li>Parking available at both venues</li>
+                            <li>Shuttle between Ceremony ➜ Reception (16:45 & 17:00)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Map placeholder (optional) -->
+            <div class="col-lg-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="h5">Map</h4>
+                        <p class="text-muted mb-0">Embed a Google Map or directions here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DINNER MENU (from API) -->
+    <section id="menu" class="py-5">
+    <h2 class="section-title">Dinner Menu</h2>
+        @if(!(Model.Menu?.Any() ?? false))
+        {
+            <p>No menu items were found</p>
+        }
+        else
+        {
+            <div class="row g-3">
+                @foreach (var item in Model.Menu)
+                {
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">@item.Name</h5>
+                                <p class="card-text">@item.Description</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+    </section>
+
+    <!-- RSVP -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success text-center">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger text-center">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+
+    <section id="rsvp" class="py-5">
+        <h2 class="section-title">RSVP</h2>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <p class="text-muted">Please RSVP by 1 June 2026.</p>
+
+                        @await Html.PartialAsync("_RsvpForm", Model.RsvpForm)
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="py-5">
+        <h2 class="section-title">Contact</h2>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <p class="mb-1"><strong>Email:</strong> brideandbride@example.com</p>
+                        <p class="mb-1"><strong>Phone:</strong> +46 70 123 45 67</p>
+                        <p class="mb-0 text-muted">If you have allergies or special requests, tell us in your RSVP.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="h6">Gift Info</h4>
+                        <p class="mb-0 text-muted">Your presence is our gift. If you insist, a small contribution to our honeymoon would be lovely. 💛</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to top -->
+    <div class="text-center py-4">
+        <a href="#home" class="btn btn-outline-success">Back to top</a>
+    </div>
 </div>
-  
 
-@* @{
-    ViewData["Title"] = "Welcome";
+<!-- YES Modal -->
+<div class="modal fade" id="rsvpYesModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4">
+            <h2>Thank you for your RSVP!</h2>
+            <p>We've received your response and look forward to seeing you!</p>
+            <p>See you at the wedding <strong>August 15, 2026</strong></p>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-success mt-3">Close</a>
+        </div>
+    </div>
+</div>
+
+<!-- NO Modal -->
+<div class="modal fade" id="rsvpNoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4">
+            <h2>Thank you for letting us know!</h2>
+            <p>We're sorry you can't make it, but we appreciate your response.</p>
+            <p>Wishing you all the best!</p>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary mt-3">Close</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const rsvpSuccess = '@TempData["RsvpSuccess"]';
+            const isAttending = '@TempData["IsAttending"]';
+
+            if (rsvpSuccess === 'True') {
+                if (isAttending === 'True') {
+                    const yesModal = new bootstrap.Modal(document.getElementById('rsvpYesModal'));
+                    yesModal.show();
+                } else if (isAttending === 'False') {
+                    const noModal = new bootstrap.Modal(document.getElementById('rsvpNoModal'));
+                    noModal.show();
+                }
+            }
+        });
+    </script>
 }
-
-<div class="text-center mt-5">
-    <h1>Welcome to our wedding!</h1>
-    <p class="lead">Let students here and meet our family!</p>
-
-    @* <a asp-area="Admin" asp-controller="Account" asp-action="Login" class="btn btn-primary mt-3">
-        Admin Login
-    </a> 
-</div> *@
-@* 
-@{
-    ViewData["Title"] = "Welcome";
-}
-
-
-<div class="text-center mt-5">
-    <h1>Welcome to our wedding!</h1>
-    <p class="lead">Let students here and meet our family!</p>
-</div> *@
