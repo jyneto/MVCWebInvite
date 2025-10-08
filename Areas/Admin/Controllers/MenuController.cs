@@ -12,7 +12,6 @@ namespace MVCWebInvite.Areas.Admin.Controllers
     [Area("Admin")]
     public class MenuController : Controller
     {
-        //private readonly IHttpClientFactory _clientFactory;
         private readonly ILogger<MenuController> _logger;
         private readonly IAuthorizedClientProvider _authorizedClientProvider;
 
@@ -21,29 +20,6 @@ namespace MVCWebInvite.Areas.Admin.Controllers
             _authorizedClientProvider = authorizedClientProvider;
             _logger = logger;
         }
-        //public MenuController(IHttpClientFactory clientFactory, ILogger<MenuController> logger)
-        //{
-        //    _clientFactory = clientFactory;
-        //    _logger = logger;
-        //}
-
-
-        //private HttpClient CreateAuthorizedClient()
-        //{
-        //    var token = HttpContext.Session.GetString("JWToken");
-        //    _logger.LogInformation("CreateAuthorizedClient called. Token: {HasToken}", string.IsNullOrEmpty(token) ? "null or empty" : "token");
-        //    if (string.IsNullOrWhiteSpace(token))
-        //        throw new InvalidOperationException("JWT token is missing in session.");
-
-        //    if (JwtUtils.IsJwtExpired(token))
-        //        throw new InvalidOperationException("JWT token has expired.");
-        //    var client = _clientFactory.CreateClient("BackendAPI");
-
-
-        //    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-        //    return client;
-        //}
-
 
         public IActionResult RedirectLogin(string? message = null)
         {
@@ -57,7 +33,6 @@ namespace MVCWebInvite.Areas.Admin.Controllers
         {
             try
             {
-                //var client = CreateAuthorizedClient();
                 var client = _authorizedClientProvider.GetClient();
                 var response = await client.GetAsync("menu");
                 if (!response.IsSuccessStatusCode)
