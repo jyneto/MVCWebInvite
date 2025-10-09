@@ -96,13 +96,6 @@ namespace MVCWebInvite.Controllers
         }
 
 
-        [HttpGet]
-        public IActionResult ThnakYou()
-        {
-            return View();
-        }
-
-
         public IActionResult Privacy()
         {
             return View();
@@ -113,8 +106,6 @@ namespace MVCWebInvite.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
          
     }
 }
