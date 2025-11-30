@@ -155,7 +155,7 @@
     </section>
 
     <!-- RSVP -->
-    @if (TempData["SuccessMessage"] != null)
+    @* @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success text-center">
             @TempData["SuccessMessage"]
@@ -166,7 +166,7 @@
         <div class="alert alert-danger text-center">
             @TempData["ErrorMessage"]
         </div>
-    }
+    } *@
 
 
     <section id="rsvp" class="py-5">
@@ -177,7 +177,17 @@
                     <div class="card-body">
                         <p class="text-muted">Please RSVP by 1 June 2026.</p>
 
-                        @await Html.PartialAsync("_RsvpForm", Model.RsvpForm)
+                        <div class="ratio-16x9 ratio-4x3 rounded shadow-sm d-flex align-items-center justify-content-center" style="background:#fff;">
+                            <div class="text-center">
+                                <p class="mb-2">Click the button below to open the RSVP form.</p>
+                                <a class="btn btn-success btn-lg"
+                                   href="https://localhost:5173/"
+                                   target="_blank"
+                                   rel="noopener noreferrer">
+                                    Open RSVP
+                                </a>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -215,7 +225,7 @@
     </div>
 </div>
 
-<!-- YES Modal -->
+@* <!-- YES Modal -->
 <div class="modal fade" id="rsvpYesModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content text-center p-4">
@@ -237,9 +247,9 @@
             <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary mt-3">Close</a>
         </div>
     </div>
-</div>
+</div> *@
 
-@section Scripts {
+@* @section Scripts {
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             const rsvpSuccess = '@TempData["RsvpSuccess"]';
@@ -256,4 +266,4 @@
             }
         });
     </script>
-}
+} *@
