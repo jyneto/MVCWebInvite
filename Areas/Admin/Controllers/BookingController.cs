@@ -39,16 +39,18 @@ namespace MVCWebInvite.Areas.Admin.Controllers
         {
             var api = _authorizedClientProvider.GetClient();
             var bookings = await api.GetFromJsonAsync<List<Booking>>(Resource) ?? new List<Booking>();
-            var tables = await api.GetFromJsonAsync<List<Table>>("tables") ?? new List<Table>();
-            var guests = await api.GetFromJsonAsync<List<Guest>>("guest") ?? new List<Guest>();
+            //var tables = await api.GetFromJsonAsync<List<Table>>("tables") ?? new List<Table>();
+            //var guests = await api.GetFromJsonAsync<List<Guest>>("guest") ?? new List<Guest>();
 
             var vm = bookings.Select(b => new BookingListItemVm
             {
                 Id = b.Id,
                 TableId = b.FK_TableId,
-                TableNumber = tables.FirstOrDefault(t => t.Id == b.FK_TableId)?.TableNumber.ToString(),
+                //TableNumber = tables.FirstOrDefault(t => t.Id == b.FK_TableId)?.TableNumber.ToString(),
+                TableNumber = b.TableNumber?.ToString(),
                 GuestId = b.FK_GuestId,
-                GuestName = guests.FirstOrDefault(g => g.Id == b.FK_GuestId)?.FullName,
+                //GuestName = guests.FirstOrDefault(g => g.Id == b.FK_GuestId)?.FullName,
+                GuestName = b.GuestName,
                 StartTime = b.StartTime.ToLocalTime(),
                 EndTime = b.EndTime.ToLocalTime(),
                 PartySize = b.PartySize
