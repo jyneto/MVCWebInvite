@@ -25,7 +25,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Table</th>
+                    <th>Table Nr.</th>
                     <th>Guest</th>
                     <th>Start</th>
                     <th>End</th>
@@ -38,10 +38,16 @@
                     {
                         <tr>
                             <td>@b.Id</td>
-                            <td>
+                            @* <td>
                                 @(b.TableNumber != null ? b.TableNumber : (b.Id != null ? $"#{b.Id}" : "No Table"))
+                               
                
-                            </td>
+                            </td> *@
+
+                            <td>@b.TableNumber</td>
+
+                            @* <td>@(string.IsNullOrWhiteSpace(b.TableNumber) ? $"Table {b.TableId}" : b.TableNumber)</td> *@
+                            @* <td>@(string.IsNullOrWhiteSpace(b.GuestName) ? $"Guest {b.GuestId}" : b.GuestName)</td> *@
                             <td>
                                 @(b.GuestName != null ? b.GuestName : (b.GuestId != null ? $"ID {b.GuestId}" : "No Guest"))
               
